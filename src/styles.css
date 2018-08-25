@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: kidsFont;
+    src: url('assets/fonts/Signatra.ttf');
+}
+
+@font-face {
+    font-family: numbersFont;
+    src: url('assets/fonts/KGWhatDoesTheFoxSay.ttf');
+}
+
+body {
+  font-family: kidsFont!important;
+}
+
+.display-4 {
+  font-size: 40px;
+}
+
+.card-title {
+  font-size: 30px!important;
+}
+
+.font4Numbers {
+  font-family: numbersFont!important;
+}

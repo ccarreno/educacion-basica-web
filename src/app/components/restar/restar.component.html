@@ -1,0 +1,24 @@
+<div class="card-columns">
+  <div *ngFor="let item of items">
+  <div class="card" *ngIf="!item.resuelto">
+    <img class="card-img-top mx-auto d-block" src="/assets/img/{{ item.randomImageURL }}" alt="{{ item.randomImageURL }}" style="width: 80%; height: 80%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ item.titulo }}</h5>
+      <p class="card-text text-right h3 font4Numbers">&nbsp;&nbsp;{{ item.valorA }}<br/> - {{ item.valorB }}</p>
+      <hr/>
+      <form *ngIf="!item.resuelto">
+        <div class="form-group row">
+          <label for="txtRespuesta{{ item.id }}" class="col-sm-6 col-form-label">Respuesta</label>
+          <input type="number" class="col-sm-6 form-control text-right h3 font4Numbers" #respuesta id="txtRespuesta{{ item.id }}" placeholder="1234" maxlength="4">
+        </div>
+        <button type="button" class="btn btn-outline-primary" (click)="validarRespuesta(respuesta.value, item.id )">Terminé</button>
+      </form>
+      <br />
+      <p class="card-text h5" *ngIf="item.errorCalculo">
+        <img src="/assets/img/focus.png" class="img-thumbnail" alt="Concéntrate Midoriya!" hight="100px" width="100px" />
+        <small class="text-danger">&nbsp;Concéntrate Midoriya!</small>
+      </p>
+    </div>
+  </div>
+  <div>
+</div>
