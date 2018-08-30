@@ -9,6 +9,7 @@ import { Item } from "../model/item.model";
 export class SumarService {
 
   client:HttpClient;
+  items:Item[] = [];
 
   constructor( _client: HttpClient) {
     this.client = _client;
@@ -18,7 +19,6 @@ export class SumarService {
 
     console.log("inside of generarSumas()");
 
-    let items:Item[] = [];
     let images:string[] = ["TCG_All_Might_and_Izuku.png",
 "TCG_All_Might_and_One_For_All.png",
 "TCG_All_Might_Carolina_Smash.png",
@@ -104,12 +104,12 @@ export class SumarService {
     let s = date.toISOString().slice(0,10);
     console.log(s);
     this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/existen/suma/' + s)
-      .subscribe(existen => {
+      .subscribe((existen:any[]) => {
         console.log(existen);
         if(existen.length != 0) {
           console.log("debo ir a buscar las operaciones de suma de hoy");
           this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/suma/' + s)
-            .subscribe(operaciones => {
+            .subscribe((operaciones:Item[]) => {
               console.log(operaciones);
               this.items = operaciones;
           });
@@ -121,7 +121,7 @@ export class SumarService {
             let imgRandomIndex = this.generarRandom(1, 75);
             let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
 
-            items.push(item);
+            this.items.push(item);
             this.client.post('http://localhost:4201/educacion-basica-ws/api/v1/operaciones', item)
               .subscribe(
                 res => {
@@ -151,7 +151,7 @@ export class SumarService {
     //   //console.log(item.operacion, item.valorA, item.valorB);
     // }
 
-    return items;
+    return this.items;
   }
 
   generarRandom(min:number, max:number) {
