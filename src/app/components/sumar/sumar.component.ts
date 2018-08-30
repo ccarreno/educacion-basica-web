@@ -17,12 +17,12 @@ export class SumarComponent implements OnInit {
     console.log(this.items);
   }
 
-  validarRespuesta(respuesta:number, id:number) {
+  validarRespuesta(respuesta:number, index:number) {
     //https://animeflv.net/ver/49836/boku-no-hero-academia-3rd-season-19
     for(let it of this.items) {
-      if(it.id == id) {
+      if(it.index == index) {
         if(it.resultadoOK == respuesta) {
-          console.log("respuesta=" + respuesta + "; id=" + id);
+          console.log("respuesta=" + respuesta + "; index=" + index);
           it.resuelto = true;
           break;
         }

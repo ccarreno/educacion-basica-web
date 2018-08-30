@@ -2,8 +2,9 @@
 
 export class Item {
 
-  id:number;
-  operacion:string="suma";
+  _id:any;
+  index:number;
+  tipo_operacion:string="suma";
   valorA:number;
   valorB:number;
   resultadoUsuario:number;
@@ -12,10 +13,11 @@ export class Item {
   resuelto:boolean = false;
   titulo:string;
   errorCalculo:boolean = false;
+  fecha:Date;
 
   public constructor(_id:number, _operacion:string, _valorA:number, _valorB:number, _imageURL:string) {
-    this.id = _id;
-    this.operacion = _operacion;
+    this.index = _id;
+    this.tipo_operacion = _operacion;
     this.valorA = _valorA;
     this.valorB = _valorB;
     this.randomImageURL = _imageURL;
@@ -25,19 +27,19 @@ export class Item {
 
   public calcularResultado():void {
 
-    if(this.operacion == "suma") {
+    if(this.tipo_operacion == "suma") {
       this.resultadoOK = this.valorA + this.valorB;
     }
 
-    if(this.operacion == "resta") {
+    if(this.tipo_operacion == "resta") {
       this.resultadoOK = this.valorA - this.valorB;
     }
 
-    if(this.operacion == "multiplicacion") {
+    if(this.tipo_operacion == "multiplicacion") {
       this.resultadoOK = this.valorA * this.valorB;
     }
 
-    if(this.operacion == "division") {
+    if(this.tipo_operacion == "division") {
       this.resultadoOK = this.valorA / this.valorB;
     }
   }

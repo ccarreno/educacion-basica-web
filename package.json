@@ -1,6 +1,6 @@
 {
   "name": "educacion-basica-web",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -44,5 +44,17 @@
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "~2.7.2"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.",
+  "main": "app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccarreno/educacion-basica-web.git"
+  },
+  "author": "ccarreno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ccarreno/educacion-basica-web/issues"
+  },
+  "homepage": "https://github.com/ccarreno/educacion-basica-web#readme"
 }

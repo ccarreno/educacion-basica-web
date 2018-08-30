@@ -19,13 +19,14 @@ import { VerbosComponent } from './components/lenguaje/verbos/verbos.component';
 import { VertebradosComponent } from './components/ciencias-naturales/vertebrados/vertebrados.component';
 import { InvertebradosComponent } from './components/ciencias-naturales/invertebrados/invertebrados.component';
 
+import { HttpClientModule } from '@angular/common/http';
 import { APP_ROUTING } from './app.routes';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    BodyComponent,  .
+    BodyComponent,
     FooterComponent,
     HomeComponent,
     SumarComponent,
@@ -42,6 +43,7 @@ import { APP_ROUTING } from './app.routes';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     APP_ROUTING
   ],
   providers: [],

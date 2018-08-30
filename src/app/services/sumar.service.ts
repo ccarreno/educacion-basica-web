@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Item } from "../model/item.model";
 //import { OperacionService } from './operacion.service';
 
@@ -7,7 +8,10 @@ import { Item } from "../model/item.model";
 })
 export class SumarService {
 
-  constructor() {
+  client:HttpClient;
+
+  constructor( _client: HttpClient) {
+    this.client = _client;
   }
 
   generarSumas() {
@@ -95,14 +99,57 @@ export class SumarService {
     const MIN = 100;
     const TIPO = "suma";
 
-    for(let i = 0; i < 12 ; i++) {
-      let valorA = this.generarRandom(MIN, MAX);
-      let valorB = this.generarRandom(MIN, MAX);
-      let imgRandomIndex = this.generarRandom(1, 75);
-      let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
-      items.push(item);
-      //console.log(item.operacion, item.valorA, item.valorB);
-    }
+
+    let date = new Date();
+    let s = date.toISOString().slice(0,10);
+    console.log(s);
+    this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/existen/suma/' + s)
+      .subscribe(existen => {
+        console.log(existen);
+        if(existen.length != 0) {
+          console.log("debo ir a buscar las operaciones de suma de hoy");
+          this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/suma/' + s)
+            .subscribe(operaciones => {
+              console.log(operaciones);
+              this.items = operaciones;
+          });
+        } else {
+          console.log("debo registrar las operaciones de suma de hoy");
+          for(let i = 0; i < 12 ; i++) {
+            let valorA = this.generarRandom(MIN, MAX);
+            let valorB = this.generarRandom(MIN, MAX);
+            let imgRandomIndex = this.generarRandom(1, 75);
+            let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
+
+            items.push(item);
+            this.client.post('http://localhost:4201/educacion-basica-ws/api/v1/operaciones', item)
+              .subscribe(
+                res => {
+                  console.log(res);
+                },
+                err => {
+                  console.log("Error occured");
+                }
+              );
+            //console.log(item.operacion, item.valorA, item.valorB);
+          }
+        }
+
+    });
+    // this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/tipo-operaciones')
+    //   .subscribe(data => {
+    //     console.log(data);
+    // });
+
+    // for(let i = 0; i < 12 ; i++) {
+    //   let valorA = this.generarRandom(MIN, MAX);
+    //   let valorB = this.generarRandom(MIN, MAX);
+    //   let imgRandomIndex = this.generarRandom(1, 75);
+    //   let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
+    //
+    //   items.push(item);
+    //   //console.log(item.operacion, item.valorA, item.valorB);
+    // }
 
     return items;
   }
