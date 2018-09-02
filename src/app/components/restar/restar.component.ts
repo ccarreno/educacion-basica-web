@@ -8,12 +8,16 @@ import { Item } from '../../model/item.model';
 })
 export class RestarComponent implements OnInit {
 
-  items:Item[] = [];
-  restarService:RestarService;
+  items:Item[];
+  promesa:Promise<Item[]>;
+  service:RestarService;
 
-  constructor(_restarService:RestarService) {
-    this.restarService = _restarService;
-    this.items = this.restarService.generarRestas();
+  constructor(_service:RestarService) {
+    this.service = _service;
+    this.promesa = this.service.generarRestas();
+    this.promesa.then(value => {
+      this.items = value;
+    });
     console.log(this.items);
   }
 
@@ -24,9 +28,14 @@ export class RestarComponent implements OnInit {
         if(it.resultadoOK == respuesta) {
           console.log("respuesta=" + respuesta + "; index=" + index);
           it.resuelto = true;
+          it.resultadoUsuario = respuesta;
+          it.errorCalculo = false;
+          this.service.modificarOperacion(it);
           break;
         }
         it.errorCalculo = true;
+        it.resultadoUsuario = respuesta;
+        this.service.modificarOperacion(it);
         break;
       }
     }

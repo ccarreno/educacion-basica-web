@@ -1,5 +1,5 @@
 <div class="card-columns">
-  <div *ngFor="let item of items">
+  <div *ngFor="let item of promesa | async">
   <div class="card" *ngIf="!item.resuelto">
     <img class="card-img-top mx-auto d-block" src="/assets/img/{{ item.randomImageURL }}" alt="{{ item.randomImageURL }}" style="width: 80%; height: 80%;">
     <div class="card-body">

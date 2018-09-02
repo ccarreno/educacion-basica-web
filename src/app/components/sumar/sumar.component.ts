@@ -9,11 +9,15 @@ import { Item } from '../../model/item.model';
 export class SumarComponent implements OnInit {
 
   items:Item[];
-  sumarService:SumarService;
+  promesa:Promise<Item[]>;
+  service:SumarService;
 
-  constructor(_sumarService:SumarService) {
-    this.sumarService = _sumarService;
-    this.items = this.sumarService.generarSumas();
+  constructor(_service:SumarService) {
+    this.service = _service;
+    this.promesa = this.service.generarSumas();
+    this.promesa.then(value => {
+      this.items = value;
+    });
     console.log(this.items);
   }
 
@@ -24,9 +28,14 @@ export class SumarComponent implements OnInit {
         if(it.resultadoOK == respuesta) {
           console.log("respuesta=" + respuesta + "; index=" + index);
           it.resuelto = true;
+          it.resultadoUsuario = respuesta;
+          it.errorCalculo = false;
+          this.service.modificarOperacion(it);
           break;
         }
         it.errorCalculo = true;
+        it.resultadoUsuario = respuesta;
+        this.service.modificarOperacion(it);
         break;
       }
     }

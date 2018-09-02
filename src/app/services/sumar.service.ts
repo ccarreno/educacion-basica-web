@@ -10,151 +10,74 @@ export class SumarService {
 
   client:HttpClient;
   items:Item[] = [];
+  images:any[] = [];
 
   constructor( _client: HttpClient) {
     this.client = _client;
   }
 
-  generarSumas() {
+  async generarSumas() {
 
     console.log("inside of generarSumas()");
-
-    let images:string[] = ["TCG_All_Might_and_Izuku.png",
-"TCG_All_Might_and_One_For_All.png",
-"TCG_All_Might_Carolina_Smash.png",
-"TCG_All_Might_Hero_Costume.png",
-"TCG_All_Might_vs._Sludge_Villain.png",
-"TCG_AM_Extra_HA-01-052.png",
-"TCG_Backdraft.png",
-"TCG_Denki_Kaminari_Hero_Costume.png",
-"TCG_Denki_Kaminari_PE_Kit.png",
-"TCG_Denki_Kaminari_Student_Uniform_1.png",
-"TCG_Eijiro_Kirishima_Hero_Costume.png",
-"TCG_Eijiro_Kirishima_PE_Kit.png",
-"TCG_Eijiro_Kirishima_Student_Uniform_1.png",
-"TCG_Eraserhead_Extra_HA-01-056.png",
-"TCG_Eraserhead_Extra_HAD-02-010.png",
-"TCG_Eraserhead_Hero_Costume_Extra.png",
-"TCG_Fumikage_Tokoyami_Hero_Costume.png",
-"TCG_Fumikage_Tokoyami_Student_Uniform.png",
-"TCG_Hanta_Sero_PE_Kit.png",
-"TCG_Izuku_Fighting.png",
-"TCG_Izuku_Midoriya_Analysis.png",
-"TCG_Izuku_Midoriya_Costume_Alpha.png",
-"TCG_Izuku_Midoriya_Costume_Alpha_2.png",
-"TCG_Izuku_Midoriya_Middle_School.png",
-"TCG_Izuku_Midoriya_PE_Kit.png",
-"TCG_Izuku_Midoriya_Student_Uniform.png",
-"TCG_Izuku_Midoriya_Training.png",
-"TCG_Kamui_Woods.png",
-"TCG_Katsuki_Bakugo_Hero_Costume_1.png",
-"TCG_Katsuki_Bakugo_Hero_Costume_2.png",
-"TCG_Katsuki_Bakugo_PE_Kit_1.png",
-"TCG_Katsuki_Bakugo_PE_Kit_2.png",
-"TCG_Katsuki_Bakugo_Student_Uniform.png",
-"TCG_Katsuki_Bakugo_Student_Uniform_1.png",
-"TCG_Katsuki_Bakugo_Student_Uniform_2.png",
-"TCG_Katsuki_Bakugo_Training.png",
-"TCG_Koji_Koda_Student_Uniform.png",
-"TCG_Kyoka_Jiro_Hero_Costume.png",
-"TCG_Kyoka_Jiro_Student_Uniform_1.png",
-"TCG_Mashirao_Ojiro_Hero_Costume.png",
-"TCG_Mashirao_Ojiro_Student_Uniform_2.png",
-"TCG_Mezo_Shoji_Hero_Costume.png",
-"TCG_Mezo_Shoji_PE_Kit.png",
-"TCG_Mina_Student_Uniform.png",
-"TCG_Minoru_Mineta_Hero_Costume.png",
-"TCG_Minoru_Mineta_PE_Kit.png",
-"TCG_Minoru_Mineta_Student_Uniform.png",
-"TCG_Momo_Hero_Costume.png",
-"TCG_Momo_Student_Uniform.png",
-"TCG_Momo_Yaoyorozu_PE_Kit.png",
-"TCG_Mt._Lady.png",
-"TCG_Ochaco_Uraraka_Civilian_Clothes.png",
-"TCG_Ochaco_Uraraka_Hero_Costume.png",
-"TCG_Ochaco_Uraraka_PE_Kit_1.png",
-"TCG_Ochaco_Uraraka_PE_Kit_2.png",
-"TCG_Ochaco_Uraraka_Student_Uniform.png",
-"TCG_Ochaco_Uraraka_Student_Uniform_2.png",
-"TCG_Present_Mic.png",
-"TCG_Recovery_Girl_Extra_HAD-01-010.png",
-"TCG_Rikido_Sato_PE_Kit.png",
-"TCG_Shoto_Todoroki_1st_Hero_Costume.png",
-"TCG_Shoto_Todoroki_PE_Kit.png",
-"TCG_Shoto_Todoroki_Student_Uniform.png",
-"TCG_Tenya_Iida_Hero_Costume.png",
-"TCG_Tenya_Iida_PE_Kit.png",
-"TCG_Tenya_Iida_PE_Kit_2.png",
-"TCG_Tenya_Iida_Student_Uniform.png",
-"TCG_Tenya_Iida_Training_Outfit.png",
-"TCG_Toru_Hagakure_Hero_Costume.png",
-"TCG_Tsuyu_Asui_Hero_Costume.png",
-"TCG_Tsuyu_Asui_PE_Kit_1.png",
-"TCG_Tsuyu_Asui_Student_Uniform.png",
-"TCG_Yuga_Aoyama.png",
-"TCG_Yuga_Aoyama_Hero_Costume.png",
-"TCG_Yuga_Aoyama_PE_Kit_1.png"];
-
-    const MAX = 999;
-    const MIN = 100;
-    const TIPO = "suma";
-
 
     let date = new Date();
     let s = date.toISOString().slice(0,10);
     console.log(s);
-    this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/existen/suma/' + s)
-      .subscribe((existen:any[]) => {
-        console.log(existen);
-        if(existen.length != 0) {
-          console.log("debo ir a buscar las operaciones de suma de hoy");
-          this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/operaciones/suma/' + s)
-            .subscribe((operaciones:Item[]) => {
-              console.log(operaciones);
-              this.items = operaciones;
-          });
-        } else {
-          console.log("debo registrar las operaciones de suma de hoy");
-          for(let i = 0; i < 12 ; i++) {
-            let valorA = this.generarRandom(MIN, MAX);
-            let valorB = this.generarRandom(MIN, MAX);
-            let imgRandomIndex = this.generarRandom(1, 75);
-            let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
+    console.log("check_URL : " + OPERACIONES_URL + 'existen/'+ TIPO +'/' + s);
+    let existen = await this.client.get<Item[]>(OPERACIONES_URL + 'existen/'+ TIPO +'/' + s).toPromise();
+    if(existen != null && existen.length != 0) {
+      console.log("debo ir a buscar las operaciones de " + TIPO + " de hoy");
+      console.log("getOperaciones_URL : " + OPERACIONES_URL + TIPO +'/' + s);
+      this.items = await this.client.get<Item[]>(OPERACIONES_URL + TIPO +'/' + s).toPromise();
+      console.log(this.items);
+      console.log("existían items...");
+    } else {
+      console.log("debo registrar las operaciones de " + TIPO + " de hoy");
+      this.images = await this.client.get<any[]>(IMG_URL).toPromise();
+      for(let i = 0; i < 12 ; i++) {
+        let valorA = this.generarRandom(MIN, MAX);
+        let valorB = this.generarRandom(MIN, MAX);
+        let imgRandomIndex = this.generarRandom(0, this.images.length-1);
+        let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex].nombreArchivo);
 
-            this.items.push(item);
-            this.client.post('http://localhost:4201/educacion-basica-ws/api/v1/operaciones', item)
-              .subscribe(
-                res => {
-                  console.log(res);
-                },
-                err => {
-                  console.log("Error occured");
-                }
-              );
-            //console.log(item.operacion, item.valorA, item.valorB);
-          }
-        }
-
-    });
-    // this.client.get('http://localhost:4201/educacion-basica-ws/api/v1/tipo-operaciones')
-    //   .subscribe(data => {
-    //     console.log(data);
-    // });
-
-    // for(let i = 0; i < 12 ; i++) {
-    //   let valorA = this.generarRandom(MIN, MAX);
-    //   let valorB = this.generarRandom(MIN, MAX);
-    //   let imgRandomIndex = this.generarRandom(1, 75);
-    //   let item = new Item(i+1, TIPO, valorA, valorB, images[imgRandomIndex]);
-    //
-    //   items.push(item);
-    //   //console.log(item.operacion, item.valorA, item.valorB);
-    // }
-
+        // this.items.push(item);
+        this.client.post(OPERACIONES_URL, item)
+          .subscribe(
+            (res:Item) => {
+              console.log(res);
+              this.items.push(res);
+            },
+            err => {
+              console.log("Error occured : " + err);
+            }
+          );
+      }
+    }
+    console.log("SALÍ CTM " + TIPO);
     return this.items;
+  }
+
+  modificarOperacion(item:Item) {
+    console.log(OPERACIONES_URL + item._id);
+    console.log(item);
+    this.client.put(OPERACIONES_URL + item._id, item)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log("Error occured : " + err);
+        }
+      );
   }
 
   generarRandom(min:number, max:number) {
     return Math.floor(Math.random()*(max - min) + min);
   }
 }
+
+export const MAX = 999;
+export const MIN = 100;
+export const TIPO = "suma";
+export const IMG_URL = "http://localhost:4201/educacion-basica-ws/api/v1/imagenes/";
+export const OPERACIONES_URL = "http://localhost:4201/educacion-basica-ws/api/v1/operaciones/";
