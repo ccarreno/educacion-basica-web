@@ -14,7 +14,7 @@ export class SumarComponent implements OnInit {
 
   constructor(_service:SumarService) {
     this.service = _service;
-    this.promesa = this.service.generarSumas();
+    this.promesa = this.service.generarSumas("dcarreno");
     this.promesa.then(value => {
       this.items = value;
     });

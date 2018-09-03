@@ -14,7 +14,7 @@ export class RestarComponent implements OnInit {
 
   constructor(_service:RestarService) {
     this.service = _service;
-    this.promesa = this.service.generarRestas();
+    this.promesa = this.service.generarRestas("dcarreno");
     this.promesa.then(value => {
       this.items = value;
     });
