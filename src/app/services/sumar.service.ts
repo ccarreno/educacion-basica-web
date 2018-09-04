@@ -85,6 +85,48 @@ export class SumarService {
       );
   }
 
+  async cerrarBitacoraOperacion(bitacoraId:any) {
+
+    let cerrado:boolean = false;
+    console.log(BITACORA_OPERACIONES_URL + bitacoraId);
+    // console.log(item);
+    await this.client.put(BITACORA_OPERACIONES_URL + bitacoraId, {"completado":true})
+      .subscribe(
+        res => {
+          console.log(res);
+          if(res != null) {
+            cerrado = true;
+          }
+        },
+        err => {
+          console.log("Error occured : " + err);
+        }
+      );
+    return cerrado;
+  }
+
+  async existeOtraBitacoraCerrada(tipo_operacion:string, usuario:string) {
+    //existe/:tipo_operacion/:usuario/:fecha
+    let encontrado:boolean = false;
+    let date = new Date();
+    let s = date.toISOString().slice(0,10);
+    console.log(BITACORA_OPERACIONES_URL + "completado/" + tipo_operacion + "/" + usuario + "/" + s);
+      // console.log(item);
+    await this.client.get(BITACORA_OPERACIONES_URL + "completado/" + tipo_operacion + "/" + usuario + "/" + s)
+        .subscribe(
+          (res:any[]) => {
+            console.log(res);
+            if(res != null && res.length > 0) {
+              encontrado = true;
+            }
+          },
+          err => {
+            console.log("Error occured : " + err);
+          }
+        );
+      return encontrado;
+  }
+
   generarRandom(min:number, max:number) {
     return Math.floor(Math.random()*(max - min) + min);
   }

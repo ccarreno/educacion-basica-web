@@ -9,12 +9,11 @@
       <form *ngIf="!item.resuelto">
         <div class="form-group row">
           <label for="txtRespuesta{{ item.index }}" class="col-sm-8 col-form-label">Multiplica primero la unidad</label>
-          <input type="number" class="col-sm-4 form-control text-right h3 font4Numbers" id="txtRespuestaLinea1{{ item.index }}"  maxlength="4">
+          <input type="number" class="col-sm-4 form-control text-right h3 font4Numbers" id="txtRespuestaLinea1{{ item.index }}"  maxlength="6">
         </div>
         <div class="form-group row">
           <label for="txtRespuesta{{ item.index }}" class="col-sm-6 col-form-label">Multiplica luego la Decena</label>
-          <input type="number" class="col-sm-4 form-control text-right h3 font4Numbers" id="txtRespuestaLinea2{{ item.index }}"  maxlength="4">
-          <label class="col-sm-2 col-form-label text-right">X</label>
+          <input type="text" class="col-sm-4 form-control text-right h3 font4Numbers" id="txtRespuestaLinea2{{ item.index }}"  maxlength="6" value="X">
         </div>
         <div class="form-group row">
           <label for="txtRespuesta{{ item.index }}" class="col-sm-6 col-form-label">Finalmente Suma...</label>
