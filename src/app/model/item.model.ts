@@ -31,19 +31,19 @@ export class Item {
 
   public calcularResultado():void {
 
-    if(this.tipo_operacion == "suma") {
+    if(this.tipo_operacion == "sumas") {
       this.resultadoOK = this.valorA + this.valorB;
     }
 
-    if(this.tipo_operacion == "resta") {
+    if(this.tipo_operacion == "restas") {
       this.resultadoOK = this.valorA - this.valorB;
     }
 
-    if(this.tipo_operacion == "multiplicacion") {
+    if(this.tipo_operacion == "multiplicaciones") {
       this.resultadoOK = this.valorA * this.valorB;
     }
 
-    if(this.tipo_operacion == "division") {
+    if(this.tipo_operacion == "divisiones") {
       this.resultadoOK = this.valorA / this.valorB;
     }
   }

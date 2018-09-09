@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SumarService } from '../../services/sumar.service';
+import { OperacionService } from "../../services/operacion.service";
 import { Item } from '../../model/item.model';
+import { Router } from '@angular/router';
+import { StatusBitacora } from '../../model/statusBitacora.model';
 
 @Component({
   selector: 'app-sumar',
@@ -12,9 +15,13 @@ export class SumarComponent implements OnInit {
   promesa:Promise<Item[]>;
   service:SumarService;
   usuario:string;
+  router:Router;
+  operacionService:OperacionService;
 
-  constructor(_service:SumarService) {
+  constructor(_service:SumarService, _router:Router, _operacionService:OperacionService) {
     this.service = _service;
+    this.router = _router;
+    this.operacionService = _operacionService;
     this.usuario = "dcarreno";
     this.promesa = this.service.generarSumas(this.usuario);
     this.promesa.then(value => {
@@ -24,7 +31,9 @@ export class SumarComponent implements OnInit {
   }
 
   async validarRespuesta(respuesta:number, index:number) {
-    //https://animeflv.net/ver/49836/boku-no-hero-academia-3rd-season-19
+
+    console.log("validarRespuesta(" + respuesta + ", " + index + "))");
+
     for(let it of this.items) {
       if(it.index == index) {
         if(it.resultadoOK == respuesta) {
@@ -32,57 +41,35 @@ export class SumarComponent implements OnInit {
           it.resuelto = true;
           it.resultadoUsuario = respuesta;
           it.errorCalculo = false;
-          this.service.modificarOperacion(it);
+          this.operacionService.modificarOperacion(it);
           break;
         }
         it.errorCalculo = true;
         it.resultadoUsuario = respuesta;
-        this.service.modificarOperacion(it);
+        this.operacionService.modificarOperacion(it);
         break;
       }
     }
-    this.revisionOperaciones();
-  }
-
-  revisionOperaciones() {
-    let haTerminado:boolean = true;
-    let bitacoraId:any;
+    // let revisionOperaciones:any = this.operacionService.revisionOperaciones();
+    let revisionOperaciones:any = {
+      haTerminado:true
+    };
     for(let it of this.items) {
+      revisionOperaciones.bitacoraId = it.bitacoraId;
       if(!it.resuelto) {
-        haTerminado = false;
-        return haTerminado;
-      }
-      bitacoraId = it.bitacoraId;
-    }
-
-    if(this.service.cerrarBitacoraOperacion(bitacoraId)) {
-      if(this.revisionOtrasOperaciones()) {
-        this.buscarPremio();
-      } else {
-        //href a otra operacion con router navigation url
+        revisionOperaciones.haTerminado = false;
       }
     }
 
-    return haTerminado;
-  }
+    console.log(revisionOperaciones);
 
-  revisionOtrasOperaciones() {
-    //revisar bitacora de resta, multiplicacion & division
-    let cerrada:boolean = false;
-    if(this.service.existeOtraBitacoraCerrada("resta", this.usuario)) {
-      cerrada = true;
-    } else if(this.service.existeOtraBitacoraCerrada("multiplicacion", this.usuario)) {
-      cerrada = true;
-    } else if(this.service.existeOtraBitacoraCerrada("division", this.usuario)) {
-      cerrada = true;
+    if(revisionOperaciones.haTerminado && this.operacionService.cerrarBitacoraOperacion(revisionOperaciones.bitacoraId)) {
+
+      let otrasOperaciones:StatusBitacora;
+      await this.operacionService.revisionOtrasOperaciones(this.usuario, ["restas", "multiplicaciones", "divisiones"]).then(result => otrasOperaciones = result);
+
+      // this.operacionService.evaluarOtrasOperaciones(otrasOperaciones);
     }
-    return cerrada;
-  }
-
-  buscarPremio() {
-    //buscar premio por fecha de hoy(videos), si no encuentra, buscar el siguiente indice ascendente visto:false
-    //http://localhost:4201/educacion-basica-ws/api/v1/premio/2018-09-09
-    //http://localhost:4201/educacion-basica-ws/api/v1/premio
   }
 
   ngOnInit() {

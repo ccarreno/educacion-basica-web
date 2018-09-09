@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Item } from "../model/item.model";
 import { BitacoraOperaciones } from "../model/bitacora.model";
+import { OperacionService } from "./operacion.service";
+import { StatusBitacora } from '../model/statusBitacora.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +14,11 @@ export class RestarService {
   items:Item[] = [];
   images:any[] = [];
   bitacora:BitacoraOperaciones;
+  operacionService:OperacionService;
 
-  constructor( _client: HttpClient) {
+  constructor( _client: HttpClient, _operacionService:OperacionService) {
     this.client = _client;
+    this.operacionService = _operacionService;
   }
 
   async generarRestas(usuario:string) {
@@ -32,6 +36,28 @@ export class RestarService {
       console.log("getOperaciones_URL : " + OPERACIONES_URL + TIPO +'/' + s);
       this.items = await this.client.get<Item[]>(OPERACIONES_URL + TIPO +'/' + s).toPromise();
       console.log(this.items);
+
+      // let revisionOperaciones:any = this.operacionService.revisionOperaciones();
+      let revisionOperaciones:any = {
+        haTerminado:true
+      };
+      for(let it of this.items) {
+        revisionOperaciones.bitacoraId = it.bitacoraId;
+        if(!it.resuelto) {
+          revisionOperaciones.haTerminado = false;
+        }
+      }
+
+      console.log(revisionOperaciones);
+
+      if(revisionOperaciones.haTerminado) {
+
+        let otrasOperaciones:StatusBitacora;
+        await this.operacionService.revisionOtrasOperaciones(usuario, ["sumas", "multiplicaciones", "divisiones"]).then(resultado => { otrasOperaciones = resultado });
+
+        // this.operacionService.evaluarOtrasOperaciones(otrasOperaciones);
+      }
+
       console.log("existían items...");
     } else {
       console.log("debo registrar las operaciones de " + TIPO + " de hoy y crear la bitacora");
@@ -41,14 +67,14 @@ export class RestarService {
         (res:BitacoraOperaciones) => {
           console.log(res);
           this.bitacora = res;
+
           for(let i = 0; i < 12 ; i++) {
-            let valorA = this.generarRandom(MIN, MAX);
-            let valorB = this.generarRandom(MIN, valorA);
-            let imgRandomIndex = this.generarRandom(0, this.images.length-1);
+            let valorA = this.operacionService.generarRandom(MIN, MAX);
+            let valorB = this.operacionService.generarRandom(MIN, valorA);
+            let imgRandomIndex = this.operacionService.generarRandom(0, this.images.length-1);
             console.log(this.bitacora._id);
             let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex].nombreArchivo, usuario, this.bitacora._id);
 
-            //this.items.push(item);
             this.client.post(OPERACIONES_URL, item)
               .subscribe(
                 (res:Item) => {
@@ -66,32 +92,13 @@ export class RestarService {
         }
       );
     }
-    console.log("SALÍ CTM " + TIPO);
     return this.items;
-  }
-
-  modificarOperacion(item:Item) {
-    console.log(OPERACIONES_URL + item._id);
-    console.log(item);
-    this.client.put(OPERACIONES_URL + item._id, item)
-      .subscribe(
-        res => {
-          console.log(res);
-        },
-        err => {
-          console.log("Error occured : " + err);
-        }
-      );
-  }
-
-  generarRandom(min:number, max:number) {
-    return Math.floor(Math.random()*(max - min) + min);
   }
 }
 
 export const MAX = 999;
 export const MIN = 100;
-export const TIPO = "resta";
+export const TIPO = "restas";
 export const IMG_URL = "http://localhost:4201/educacion-basica-ws/api/v1/imagenes/";
 export const OPERACIONES_URL = "http://localhost:4201/educacion-basica-ws/api/v1/operaciones/";
 export const BITACORA_OPERACIONES_URL = "http://localhost:4201/educacion-basica-ws/api/v1/bitacora-operacion/";

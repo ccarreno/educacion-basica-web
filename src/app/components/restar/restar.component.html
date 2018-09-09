@@ -9,7 +9,7 @@
       <form *ngIf="!item.resuelto">
         <div class="form-group row">
           <label for="txtRespuesta{{ item.index }}" class="col-sm-6 col-form-label">Respuesta</label>
-          <input type="number" class="col-sm-6 form-control text-right h3 font4Numbers" #respuesta id="txtRespuesta{{ item.index }}" placeholder="1234" maxlength="4">
+          <input type="number" class="col-sm-6 form-control text-right h3 font4Numbers" #respuesta id="txtRespuesta{{ item.index }}" maxlength="4">
         </div>
         <button type="button" class="btn btn-outline-primary" (click)="validarRespuesta(respuesta.value, item.index )">Terminé</button>
       </form>
