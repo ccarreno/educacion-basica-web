@@ -61,6 +61,13 @@ export class OperacionService {
     return cerrado;
   }
 
+	public buscarBitacorasUsuarioHoy(usuario:string): Observable<any[]> {
+    let date = new Date();
+    let s = date.toISOString().slice(0,10);
+    console.log(BITACORA_OPERACIONES_URL + "existen/" + usuario + "/" + s);
+		return this.client.get<any[]>(BITACORA_OPERACIONES_URL + "existen/" + usuario + "/" + s);
+	}
+
 	public existeOtraBitacoraCerrada(tipo_operacion:string, usuario:string): Observable<any[]> {
     let date = new Date();
     let s = date.toISOString().slice(0,10);
@@ -113,8 +120,13 @@ export class OperacionService {
       op3: new TipoOperacionStatus (tipo_operaciones[2]),
       usuario: usuario
     };
-
-    await this.existeOtraBitacoraCerrada(tipo_operaciones[0], usuario).subscribe(resultado => {
+    /** 
+     * TODO: consultar sólo una vez por las operaciones finalizadas 
+     * y comprobar que se encuentren completadas para poder asignar un premio.
+     * http://localhost:4201/educacion-basica-ws/api/v1/bitacora-operacion/existen/dcarreno/2019-01-22
+     * count >= 2 de completado: true ==> premio 
+    **/
+    await this.buscarBitacorasUsuarioHoy(usuario).subscribe(resultado => {
       console.log(resultado);
       otrasOperaciones.op1.response = resultado;
       if(resultado && resultado.length > 0) {
@@ -123,23 +135,23 @@ export class OperacionService {
       }
     });
 
-    await this.existeOtraBitacoraCerrada(tipo_operaciones[1], usuario).subscribe(resultado => {
-      console.log(resultado);
-      otrasOperaciones.op2.response = resultado;
-      if(resultado && resultado.length > 0)  {
-        otrasOperaciones.op2.cerrada = true;
-        this.buscarPremio();
-      }
-    });
+    // await this.existeOtraBitacoraCerrada(tipo_operaciones[1], usuario).subscribe(resultado => {
+    //   console.log(resultado);
+    //   otrasOperaciones.op2.response = resultado;
+    //   if(resultado && resultado.length > 0)  {
+    //     otrasOperaciones.op2.cerrada = true;
+    //     this.buscarPremio();
+    //   }
+    // });
 
-    await this.existeOtraBitacoraCerrada(tipo_operaciones[2], usuario).subscribe(resultado => {
-      console.log(resultado);
-      otrasOperaciones.op3.response = resultado;
-      if(resultado && resultado.length > 0)  {
-        otrasOperaciones.op3.cerrada = true;
-        this.buscarPremio();
-      }
-    });
+    // await this.existeOtraBitacoraCerrada(tipo_operaciones[2], usuario).subscribe(resultado => {
+    //   console.log(resultado);
+    //   otrasOperaciones.op3.response = resultado;
+    //   if(resultado && resultado.length > 0)  {
+    //     otrasOperaciones.op3.cerrada = true;
+    //     this.buscarPremio();
+    //   }
+    // });
 
     console.log(otrasOperaciones);
 
