@@ -73,7 +73,8 @@ export class MultiplicarService {
             let valorB = this.operacionService.generarRandom(MIN, MAX);
             let imgRandomIndex = this.operacionService.generarRandom(0, this.images.length-1);
             console.log(this.bitacora._id);
-            let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex].nombreArchivo, usuario, this.bitacora._id);
+            let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex], 
+              usuario, this.bitacora._id);
 
             this.client.post(OPERACIONES_URL, item)
               .subscribe(

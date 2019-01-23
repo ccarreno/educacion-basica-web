@@ -1,9 +1,9 @@
 <div class="card-columns">
   <div *ngFor="let item of promesa | async">
   <div class="card" *ngIf="!item.resuelto">
-    <img class="card-img-top mx-auto d-block" src="/assets/img/{{ item.randomImageURL }}" alt="{{ item.randomImageURL }}" style="width: 80%; height: 80%;">
+    <img class="card-img-top mx-auto d-block" src="/assets/img/{{ item.imagen.nombreArchivo }}" alt="{{ item.imagen.texto }}" style="width: 80%; height: 80%;">
     <div class="card-body">
-      <h5 class="card-title">{{ item.titulo }}</h5>
+      <h5 class="card-title">{{ item.imagen.texto }}</h5>
       <p class="card-text text-right h3 font4Numbers">&nbsp;&nbsp;{{ item.valorA }}<br/> + {{ item.valorB }}</p>
       <hr/>
       <form *ngIf="!item.resuelto">

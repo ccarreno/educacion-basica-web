@@ -29,7 +29,8 @@ export class SumarService {
     let s = date.toISOString().slice(0,10);
     console.log(s);
     console.log("check_URL : " + BITACORA_OPERACIONES_URL + 'existe/'+ TIPO +'/' + usuario + '/' + s);
-    let existe = await this.client.get<BitacoraOperaciones[]>(BITACORA_OPERACIONES_URL + 'existe/'+ TIPO +'/' + usuario + '/' + s).toPromise();
+    let existe = await this.client.get<BitacoraOperaciones[]>(
+      BITACORA_OPERACIONES_URL + 'existe/'+ TIPO +'/' + usuario + '/' + s).toPromise();
     if(existe != null && existe.length != 0) {
       console.log(existe);
       console.log("debo ir a buscar las operaciones de " + TIPO + " de hoy");
@@ -53,7 +54,9 @@ export class SumarService {
       if(revisionOperaciones.haTerminado) {
 
         let otrasOperaciones:StatusBitacora;
-        await this.operacionService.revisionOtrasOperaciones(usuario, ["restas", "multiplicaciones", "divisiones"]).then(resultado => { otrasOperaciones = resultado });
+        await this.operacionService.revisionOtrasOperaciones(usuario, 
+          ["restas", "multiplicaciones", "divisiones"])
+          .then(resultado => { otrasOperaciones = resultado });
 
         // this.operacionService.evaluarOtrasOperaciones(otrasOperaciones);
       }
@@ -73,7 +76,7 @@ export class SumarService {
             let valorB = this.operacionService.generarRandom(MIN, MAX);
             let imgRandomIndex = this.operacionService.generarRandom(0, this.images.length-1);
             console.log(this.bitacora._id);
-            let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex].nombreArchivo, usuario, this.bitacora._id);
+            let item = new Item(i+1, TIPO, valorA, valorB, this.images[imgRandomIndex], usuario, this.bitacora._id);
 
             this.client.post(OPERACIONES_URL, item)
               .subscribe(

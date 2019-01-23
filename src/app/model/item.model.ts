@@ -11,19 +11,18 @@ export class Item {
   valorB:number;
   resultadoUsuario:number;
   resultadoOK:number;
-  randomImageURL:string;
+  imagen:any;
   resuelto:boolean = false;
-  titulo:string;
   errorCalculo:boolean = false;
   fecha:Date;
 
-  public constructor(_index:number, _operacion:string, _valorA:number, _valorB:number, _imageURL:string, _usuario:string, _bitacoraId:any) {
+  public constructor(_index:number, _operacion:string, _valorA:number, _valorB:number, _imagen:any, _usuario:string, _bitacoraId:any) {
     this.index = _index;
     this.tipo_operacion = _operacion;
     this.valorA = _valorA;
     this.valorB = _valorB;
-    this.randomImageURL = _imageURL;
-    this.titulo = _imageURL.replace(/_/g, ' ').replace('.png','').replace('TCG','');
+    this.imagen = _imagen;
+    //this.titulo = _imageURL.replace(/_/g, ' ').replace('.png','').replace('TCG','');
     this.usuario = _usuario;
     this.bitacoraId = _bitacoraId;
     this.calcularResultado();
